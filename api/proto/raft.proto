@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package raft;
+
+option go_package = "dist_db/api/proto";
+
+message LogEntry {
+	int64 Term = 2;
+	string Command = 3;
+	string Key = 4;
+    optional string Value = 5;
+    optional string OldValue = 6;
+};
+
+message AppendEntriesRequest {
+    int64 Term = 1;
+    int64 PrevLogIndex = 2;
+    int64 PrevLogTerm = 3;
+    int64 LeaderCommit = 4;
+    int64 LeaderID = 5;
+    repeated LogEntry entries = 6;
+};
+
+message AppendEntriesResponse {
+    int64 Term = 1;
+    bool Success = 2;
+};
+
+message VoteRequest {
+    int64 Term = 1;
+    int64 CandidateID = 2;
+    int64 LastLogIndex = 3;
+    int64 LastLogTerm = 4;
+};
+
+message VoteResponse {
+    int64 Term = 1;
+    bool VoteGranted = 2;
+};
+
+service Raft {
+    rpc RequestVote (VoteRequest) returns (VoteResponse);
+    rpc AppendEntries (AppendEntriesRequest) returns (AppendEntriesResponse);
+}
