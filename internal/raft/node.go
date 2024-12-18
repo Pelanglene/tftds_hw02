@@ -259,23 +259,23 @@ func (s *RaftServer) applyEntries(leaderCommit int64) {
 			continue
 		}
 
-		success, err := db.ProcessWrite(entry.Command, entry.Key, entry.Value, entry.OldValue)
-		if err != nil {
-			slog.Error("Error applying entry",
-				"node", s.ID,
-				"index", currentIndex,
-				"entry", entry,
-				"error", err)
-			continue
-		}
+		db.ProcessWrite(entry.Command, entry.Key, entry.Value, entry.OldValue)
+		// if err != nil {
+		// 	slog.Error("Error applying entry",
+		// 		"node", s.ID,
+		// 		"index", currentIndex,
+		// 		"entry", entry,
+		// 		"error", err)
+		// 	continue
+		// }
 
-		if !success {
-			slog.Warn("Failed to apply entry",
-				"node", s.ID,
-				"index", currentIndex,
-				"entry", entry)
-			continue
-		}
+		// if !success {
+		// 	slog.Warn("Failed to apply entry",
+		// 		"node", s.ID,
+		// 		"index", currentIndex,
+		// 		"entry", entry)
+		// 	continue
+		// }
 
 		slog.Info("Successfully applied entry",
 			"node", s.ID,
